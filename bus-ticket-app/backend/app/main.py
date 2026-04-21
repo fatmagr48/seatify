@@ -12,7 +12,7 @@ from datetime import datetime, timedelta
 from .models.user import User
 from .models.trip import Trip
 from .services.auth_service import get_password_hash
-from .kafka_utils import booking_producer, BookingConsumer
+from .messaging_utils import messaging_producer, MessagingConsumer
 
 app = FastAPI(title="Bus Ticket Simulation System")
 
@@ -66,19 +66,19 @@ async def startup_event():
             await db.commit()
             print(f"INFO:  Successfully seeded {len(target_trips)} trips.")
 
-    # Graceful initialization of simulation and Kafka
+    # Graceful initialization of simulation and Messaging
     try:
         asyncio.create_task(simulation_worker())
         manager.start_listener()
         
-        # Kafka initialization
-        await booking_producer.start()
-        consumer = BookingConsumer(manager)
+        # Messaging initialization (Redis)
+        await messaging_producer.start()
+        consumer = MessagingConsumer(manager)
         await consumer.start()
-        print("INFO:  Kafka services started successfully.")
+        print("INFO:  Messaging services (Redis) started successfully.")
     except Exception as e:
-        print(f"WARNING:  Failed to start Kafka or Simulation services: {e}")
-        print("INFO:  Application will continue running without Kafka/Simulation.")
+        print(f"WARNING:  Failed to start Messaging or Simulation services: {e}")
+        print("INFO:  Application will continue running without Messaging/Simulation.")
 
 app.add_middleware(
     CORSMiddleware,

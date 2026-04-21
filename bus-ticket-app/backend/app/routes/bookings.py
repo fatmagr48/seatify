@@ -7,7 +7,7 @@ from ..models.booking import Booking
 from ..schemas.booking import BookingCreate, BookingResponse
 from ..services.deps import get_current_user
 from ..utils import validate_tc
-from ..kafka_utils import booking_producer
+from ..messaging_utils import messaging_producer
 from ..models.trip import Trip
 from ..websocket.manager import manager
 from datetime import datetime
@@ -96,7 +96,7 @@ async def book_seat(booking_in: BookingCreate, db: AsyncSession = Depends(get_db
         trip_res = await db.execute(select(Trip).where(Trip.id == booking_in.trip_id))
         trip = trip_res.scalars().first()
         if trip:
-            await booking_producer.send_booking_event({
+            await messaging_producer.send_booking_event({
                 "event": "booking_created",
                 "name": booking_in.first_name,
                 "seat": booking_in.seat_number,
@@ -104,6 +104,6 @@ async def book_seat(booking_in: BookingCreate, db: AsyncSession = Depends(get_db
                 "time": datetime.now().strftime("%H:%M")
             })
     except Exception as e:
-        print(f"ERROR: Failed to send Kafka event: {e}")
+        print(f"ERROR: Failed to send Messaging event: {e}")
     
     return new_booking
