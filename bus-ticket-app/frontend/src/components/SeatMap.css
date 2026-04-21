@@ -1,0 +1,213 @@
+/* ── Container ── */
+.seat-map-container {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    max-width: 580px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-sm);
+}
+
+.seat-map-header {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* ── Mode toggle ── */
+.mode-toggle {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.mode-toggle button {
+    background: #f5f3ff;
+    border: 1.5px solid #e0d9ff;
+    color: var(--text-muted);
+    padding: 0.45rem 1.4rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.mode-toggle button.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 3px 10px rgba(124, 58, 237, 0.3);
+}
+
+/* ── Bus shell ── */
+.bus-layout {
+    background: #faf9ff;
+    border: 2px solid #e0d9ff;
+    border-radius: 22px 22px 10px 10px;
+    padding: 3rem 2rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+}
+
+/* Steering wheel dot */
+.steering-wheel {
+    position: absolute;
+    top: 1rem;
+    left: 2rem;
+    width: 30px;
+    height: 30px;
+    border: 3px solid #c4b5fd;
+    border-radius: 50%;
+}
+
+/* ── Row layout ── */
+.seat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.seat-group-left,
+.seat-group-right {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.aisle {
+    width: 36px;
+}
+
+/* ── Individual seat ── */
+.seat {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--seat-empty);
+    color: #a78bfa;
+    border: 1.5px solid #ddd6fe;
+    border-radius: 8px 8px 6px 6px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Top cushion highlight */
+.seat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: rgba(124, 58, 237, 0.07);
+    border-radius: 6px 6px 0 0;
+}
+
+/* ── States ── */
+.seat.available {
+    background: var(--seat-empty);
+    border-color: #ddd6fe;
+    color: #a78bfa;
+}
+
+.seat.available:hover {
+    transform: translateY(-3px) scale(1.08);
+    background: #ede9fe;
+    border-color: var(--primary-light);
+    color: var(--primary);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.18);
+}
+
+.seat.occupied {
+    background: #ffe4e6;
+    border-color: #fda4af;
+    color: #be123c;
+    cursor: not-allowed;
+}
+
+.seat.selected {
+    background: var(--primary);
+    border-color: var(--primary-hover);
+    color: white;
+    transform: scale(1.08);
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.36);
+}
+
+.seat.owned {
+    background: var(--accent);
+    border-color: #059669;
+    color: #064e3b;
+    transform: scale(1.05);
+    box-shadow: 0 3px 10px rgba(52, 211, 153, 0.35);
+}
+
+/* ── Action panel ── */
+.action-panel {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: #faf9ff;
+    border: 1px solid #ede9fe;
+    border-radius: var(--radius-md);
+    animation: slideUp 0.28s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.97rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124, 58, 237, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.35);
+}
+
+/* ── Toast ── */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 0.9rem 1.8rem;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-weight: 500;
+    font-size: 0.95rem;
+    animation: slideUp 0.3s ease;
+    z-index: 999;
+    box-shadow: var(--shadow-md);
+}
+
+.toast.success { background: linear-gradient(135deg, #34d399, #059669); }
+.toast.error   { background: linear-gradient(135deg, #f472b6, #be185d); }
+
+.instruction {
+    margin-top: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+/* ── Keyframes ── */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
