@@ -17,6 +17,7 @@ export default function Register() {
       await api.post('/register', { email, password });
       navigate('/login');
     } catch (err) {
+      console.error('Registration error details:', err.response?.data || err);
       setError(err.response?.data?.detail || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);

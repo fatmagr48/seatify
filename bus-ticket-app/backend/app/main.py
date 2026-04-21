@@ -66,13 +66,19 @@ async def startup_event():
             await db.commit()
             print(f"INFO:  Successfully seeded {len(target_trips)} trips.")
 
-    manager.start_listener()
-    asyncio.create_task(simulation_worker())
-    
-    # Kafka initialization
-    await booking_producer.start()
-    consumer = BookingConsumer(manager)
-    await consumer.start()
+    # Graceful initialization of simulation and Kafka
+    try:
+        asyncio.create_task(simulation_worker())
+        manager.start_listener()
+        
+        # Kafka initialization
+        await booking_producer.start()
+        consumer = BookingConsumer(manager)
+        await consumer.start()
+        print("INFO:  Kafka services started successfully.")
+    except Exception as e:
+        print(f"WARNING:  Failed to start Kafka or Simulation services: {e}")
+        print("INFO:  Application will continue running without Kafka/Simulation.")
 
 app.add_middleware(
     CORSMiddleware,

@@ -19,6 +19,7 @@ export default function Login() {
       localStorage.setItem('is_admin', res.data.is_admin ? 'true' : 'false');
       navigate(res.data.is_admin ? '/admin' : '/trips');
     } catch (err) {
+      console.error('Login error details:', err.response?.data || err);
       setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
